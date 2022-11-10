@@ -10,9 +10,8 @@ class SeenItems {
     @GeneratedValue
     var id: UUID? = null
 
-    @Column(name = "seenItems", unique = true)
     @ManyToOne
-    @JoinColumn(name="recommendation")
+    @JoinColumn(name="recommendation", unique = true)
     var recommendation: RecommendationsEntity? = null
 
     @Column(name = "itemId", unique = true)
