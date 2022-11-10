@@ -4,18 +4,18 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "seenCategories")
-class SeenCategories {
+@Table(name = "seen_categories")
+class SeenCategoryEntity {
     @Id
     @GeneratedValue
     var id: UUID? = null
 
     @ManyToOne
     @JoinColumn(name="recommendation", unique = true)
-    var recommendation: RecommendationsEntity? = null
+    var recommendation: RecommendationEntity? = null
 
     @Column(name = "categoryId", unique = true)
-    var categoryID: UUID? = null
+    var categoryId: UUID? = null
 
     var recommendationCoef: Int = 0
 
