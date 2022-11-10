@@ -1,0 +1,23 @@
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  application:
+    name: demo-maven-kotlin
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+
+logging:
+  level:
+    root: info
+    sql: debug
+    com.github.kuzznya: debug
