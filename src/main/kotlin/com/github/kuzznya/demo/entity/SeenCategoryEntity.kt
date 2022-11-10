@@ -11,10 +11,10 @@ class SeenCategoryEntity {
     var id: UUID? = null
 
     @ManyToOne
-    @JoinColumn(name="recommendation", unique = true)
+    @JoinColumn(unique = true)
     var recommendation: RecommendationEntity? = null
 
-    @Column(name = "categoryId", unique = true)
+    @Column(unique = true)
     var categoryId: UUID? = null
 
     var recommendationCoef: Int = 0

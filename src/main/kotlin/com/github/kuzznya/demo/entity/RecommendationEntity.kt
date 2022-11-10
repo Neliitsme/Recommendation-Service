@@ -17,9 +17,9 @@ class RecommendationEntity {
     var userId: UUID? = null
 
     @OneToMany(mappedBy = "recommendation")
-    var seenItemEntities: MutableList<SeenItemEntity>? = null
+    var seenItems: MutableList<SeenItemEntity>? = null
 
     @OneToMany(mappedBy = "recommendation")
-    var seenCategoryEntities: MutableList<SeenCategoryEntity>? = null
+    var seenCategories: MutableList<SeenCategoryEntity>? = null
 
 }
