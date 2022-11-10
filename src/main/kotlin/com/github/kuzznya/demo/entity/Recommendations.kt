@@ -2,6 +2,7 @@ package com.github.kuzznya.demo.entity
 
 import java.util.*
 import javax.persistence.Entity
+import javax.persistence.ForeignKey
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.OneToMany
@@ -17,10 +18,10 @@ class RecommendationsEntity {
 
     var userId: UUID? = null
 
-    @OneToMany
+    @OneToMany(mappedBy = "recommendation")
     var seenItems: List<SeenItems>? = null
 
-    @OneToMany
+    @OneToMany(mappedBy = "recommendation")
     var seenCategories: List<SeenCategories>? = null
 
 }
