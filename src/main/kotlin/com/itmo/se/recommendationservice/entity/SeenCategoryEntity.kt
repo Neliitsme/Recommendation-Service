@@ -1,4 +1,4 @@
-package com.github.kuzznya.demo.entity
+package com.itmo.se.recommendationservice.entity
 
 import java.util.*
 import javax.persistence.*

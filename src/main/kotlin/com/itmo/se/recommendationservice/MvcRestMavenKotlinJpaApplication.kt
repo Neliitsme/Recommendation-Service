@@ -1,4 +1,4 @@
-package com.github.kuzznya.demo
+package com.itmo.se.recommendationservice
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

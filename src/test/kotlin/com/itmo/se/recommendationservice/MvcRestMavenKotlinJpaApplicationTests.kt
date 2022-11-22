@@ -1,4 +1,4 @@
-package com.github.kuzznya.demo
+package com.itmo.se.recommendationservice
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
