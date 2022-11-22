@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class MvcRestMavenKotlinJpaApplication
+class RecommendationServiceApplication
 
 fun main(args: Array<String>) {
-    runApplication<MvcRestMavenKotlinJpaApplication>(*args)
+    runApplication<RecommendationServiceApplication>(*args)
 }
