@@ -6,7 +6,7 @@ server:
 
 spring:
   application:
-    name: demo-maven-kotlin
+    name: recommendation-service
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -20,4 +20,4 @@ logging:
   level:
     root: info
     sql: debug
-    com.github.kuzznya: debug
+    com.itmo.se.recommendationservice: debug

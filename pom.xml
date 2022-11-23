@@ -9,8 +9,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.github.kuzznya</groupId>
-    <artifactId>mvc-rest-maven-kotlin-kpa</artifactId>
+    <groupId>com.itmo.se</groupId>
+    <artifactId>recommendation-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
