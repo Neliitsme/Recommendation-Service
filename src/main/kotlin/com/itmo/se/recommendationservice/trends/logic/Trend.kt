@@ -1,5 +1,6 @@
 package com.itmo.se.recommendationservice.trends.logic
 
+import com.itmo.se.recommendationservice.orders.logic.Order
 import com.itmo.se.recommendationservice.trends.api.TrendAggregate
 import com.itmo.se.recommendationservice.trends.api.TrendEvents.*
 import ru.quipy.domain.AggregateState
@@ -25,8 +26,8 @@ class Trend : AggregateState<UUID, TrendAggregate> {
         return trendingItems.sortByDescending { it.orderedTimes }
     }
 
-    fun getTrendingItemsByCategory(categoryId: UUID){
-        // TODO: discuss whether category field is needed in SeenItem
+    fun getTrendingItemsByCategory(categoryId: UUID): List<TrendingItem> {
+        return trendingItems.filter { Order().getCategoryIdByItemId(it.itemId) == categoryId }
     }
 
 }
