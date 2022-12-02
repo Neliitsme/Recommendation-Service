@@ -38,7 +38,7 @@ class RecommendationController(
     fun changeItemRecommendationCoefficient(
         @PathVariable itemId: UUID,
         @PathVariable ownerId: UUID,
-        @RequestBody coefficient: Int
+        @RequestBody coefficient_delta: Int
     ) {
         return;
     }
