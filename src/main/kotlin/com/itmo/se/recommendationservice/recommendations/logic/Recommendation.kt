@@ -20,13 +20,15 @@ class Recommendation : AggregateState<UUID, RecommendationAggregate> {
         return RecommendationCreatedEvent(recommendationId = id, userId = userId)
     }
 
-    fun createNewSeenItem(seenItemId: UUID = UUID.randomUUID(), itemId: UUID): UserSeenItemCreatedEvent {
-        return UserSeenItemCreatedEvent(userId = userId, itemId = itemId, seenItemId = seenItemId)
+    fun createNewSeenItem(seenItemId: UUID = UUID.randomUUID(), owner_id: UUID, itemId: UUID):
+            UserSeenItemCreatedEvent {
+        return UserSeenItemCreatedEvent(userId = owner_id, itemId = itemId, seenItemId = seenItemId)
     }
 
-    private fun createNewSeenCategory(seenCategoryId: UUID = UUID.randomUUID(), itemID: UUID): UserSeenCategoryCreatedEvent {
+    private fun createNewSeenCategory(seenCategoryId: UUID = UUID.randomUUID(), owner_id: UUID, itemID: UUID):
+            UserSeenCategoryCreatedEvent {
         val categoryId = Order().getCategoryIdByItemId(itemId = itemID)
-        return UserSeenCategoryCreatedEvent(userId = userId, seenCategoryId = seenCategoryId, categoryId = categoryId)
+        return UserSeenCategoryCreatedEvent(userId = owner_id, seenCategoryId = seenCategoryId, categoryId = categoryId)
     }
 
     fun seenItemCoefficientIncreaseEvent(itemId: UUID, seenItemId: UUID, coefficient_delta: Int):
@@ -79,7 +81,7 @@ class Recommendation : AggregateState<UUID, RecommendationAggregate> {
             recommendationCoefficient = 50,
             wasBought = false)
         seenItems[event.seenItemId] = seenItem
-        createNewSeenCategory(itemID = event.itemId)
+        createNewSeenCategory(owner_id = event.userId, itemID = event.itemId)
     }
 
     @StateTransitionFunc

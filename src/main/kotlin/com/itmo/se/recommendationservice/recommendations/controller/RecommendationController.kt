@@ -1,6 +1,8 @@
 package com.itmo.se.recommendationservice.recommendations.controller
 
 import com.itmo.se.recommendationservice.recommendations.api.RecommendationAggregate
+import com.itmo.se.recommendationservice.recommendations.api.RecommendationCreatedEvent
+import com.itmo.se.recommendationservice.recommendations.api.UserSeenItemCreatedEvent
 import com.itmo.se.recommendationservice.recommendations.logic.Recommendation
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,13 +20,13 @@ class RecommendationController(
     val recommendationEsService: EventSourcingService<UUID, RecommendationAggregate, Recommendation>
 ) {
     @PostMapping("/personal/{ownerId}")
-    fun createPersonalRecommendation(@PathVariable ownerId: UUID) {
-        return;
+    fun createPersonalRecommendation(@PathVariable ownerId: UUID): RecommendationCreatedEvent {
+        return recommendationEsService.create { it.createNewRecommendation(userId = ownerId) }
     }
 
     @PostMapping("/personal/{ownerId}/items/{itemId}")
-    fun createSeenItem(@PathVariable ownerId: UUID, @PathVariable itemId: UUID) {
-        return;
+    fun createSeenItem(@PathVariable ownerId: UUID, @PathVariable itemId: UUID): UserSeenItemCreatedEvent {
+        return recommendationEsService.create { it.createNewSeenItem(owner_id = ownerId, itemId = itemId) }
     }
 
 //    TODO: Probably implement
