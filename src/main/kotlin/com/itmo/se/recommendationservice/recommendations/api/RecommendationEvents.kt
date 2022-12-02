@@ -36,7 +36,7 @@ data class UserSeenCategoryCreatedEvent(
 @DomainEvent(name = USER_SEEN_ITEM_COEFFICIENT_INCREASED)
 data class UserSeenItemCoefficientIncreaseEvent(
     val seenItemId: UUID,
-    val newCoefficient: Int
+    val coefficientDelta: Int
 ) :
     Event<RecommendationAggregate>(name = USER_SEEN_ITEM_COEFFICIENT_INCREASED)
 
@@ -44,6 +44,6 @@ data class UserSeenItemCoefficientIncreaseEvent(
 @DomainEvent(name = USER_SEEN_ITEM_COEFFICIENT_DECREASED)
 data class UserSeenItemCoefficientDecreaseEvent(
     val seenItemId: UUID,
-    val newCoefficient: Int
+    val coefficientDelta: Int
 ) :
     Event<RecommendationAggregate>(name = USER_SEEN_ITEM_COEFFICIENT_DECREASED)
