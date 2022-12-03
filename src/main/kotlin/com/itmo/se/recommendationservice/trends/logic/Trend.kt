@@ -11,7 +11,7 @@ import java.util.*
 class Trend : AggregateState<UUID, TrendAggregate> {
     private lateinit var trendId: UUID
 
-    var trendingItems: MutableList<TrendingItem> = arrayListOf()
+    var trendingItems: MutableList<TrendingItem> = mutableListOf()
 
     override fun getId(): UUID = trendId
 
