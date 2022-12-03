@@ -4,6 +4,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 import ru.quipy.streams.AggregateSubscriptionsManager
 import java.util.*
 import javax.annotation.PostConstruct
@@ -34,4 +35,5 @@ data class ItemOrderCounts(
     var orderedTimes: Int = 0
 )
 
+@Repository
 interface ItemOrderCountsRepository : JpaRepository<ItemOrderCounts, UUID>
