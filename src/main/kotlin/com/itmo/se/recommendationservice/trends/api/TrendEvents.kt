@@ -6,7 +6,7 @@ import java.util.*
 
 const val TREND_CREATED = "TREND_CREATED"
 const val TRENDING_ITEM_CREATED = "TRENDING_ITEM_CREATED"
-const val TREND_SHIFT = "TREND_SHIFT"
+
 
 
 class TrendEvents {
@@ -22,10 +22,5 @@ class TrendEvents {
         val trendingItemId: UUID
     ) : Event<TrendAggregate>(name = TRENDING_ITEM_CREATED)
 
-    class TrendEvents {
-        @DomainEvent(name = TREND_SHIFT)
-        data class TrendShiftedEvent(
-            val trendShiftedId: UUID
-        ) : Event<TrendAggregate>(name = TREND_SHIFT)
-    }
+
 }
