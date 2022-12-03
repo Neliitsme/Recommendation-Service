@@ -41,9 +41,11 @@ class Recommendation : AggregateState<UUID, RecommendationAggregate> {
                 coefficientDelta = coefficientDelta
             )
         }
+
+        val partialDelta = 100 - seenItem.recommendationCoefficient
         return UserSeenItemCoefficientIncreaseEvent(
             seenItemId = seenItemId,
-            coefficientDelta = 0
+            coefficientDelta = partialDelta,
         )
     }
 
@@ -57,9 +59,11 @@ class Recommendation : AggregateState<UUID, RecommendationAggregate> {
                 coefficientDelta = coefficientDelta
             )
         }
+
+        val partialDelta = seenItem.recommendationCoefficient
         return UserSeenItemCoefficientDecreaseEvent(
             seenItemId = seenItemId,
-            coefficientDelta = 0
+            coefficientDelta = partialDelta
         )
     }
 
