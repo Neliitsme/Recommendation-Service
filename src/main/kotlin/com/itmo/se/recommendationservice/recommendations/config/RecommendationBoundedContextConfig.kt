@@ -17,6 +17,6 @@ class RecommendationBoundedContextConfig {
     private lateinit var eventSourcingServiceFactory: EventSourcingServiceFactory
 
     @Bean
-    fun accountEsService(): EventSourcingService<UUID, RecommendationAggregate, Recommendation> =
+    fun recommendationEsService(): EventSourcingService<UUID, RecommendationAggregate, Recommendation> =
         eventSourcingServiceFactory.create()
 }

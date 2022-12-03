@@ -17,6 +17,6 @@ class TrendBoundedContextConfig {
     private lateinit var eventSourcingServiceFactory: EventSourcingServiceFactory
 
     @Bean
-    fun accountEsService(): EventSourcingService<UUID, TrendAggregate, Trend> =
+    fun trendEsService(): EventSourcingService<UUID, TrendAggregate, Trend> =
         eventSourcingServiceFactory.create()
 }
