@@ -4,13 +4,7 @@ import com.itmo.se.recommendationservice.recommendations.api.RecommendationAggre
 import com.itmo.se.recommendationservice.recommendations.api.RecommendationCreatedEvent
 import com.itmo.se.recommendationservice.recommendations.api.UserSeenItemCreatedEvent
 import com.itmo.se.recommendationservice.recommendations.logic.Recommendation
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import ru.quipy.core.EventSourcingService
 import java.util.*
 
@@ -26,7 +20,7 @@ class RecommendationController(
 
     @PostMapping("/personal/{ownerId}/items/{itemId}")
     fun createSeenItem(@PathVariable ownerId: UUID, @PathVariable itemId: UUID): UserSeenItemCreatedEvent {
-        return recommendationEsService.create { it.createNewSeenItem(owner_id = ownerId, itemId = itemId) }
+        return recommendationEsService.create { it.createNewSeenItem(ownerId = ownerId, itemId = itemId) }
     }
 
 //    TODO: Probably implement
@@ -40,18 +34,18 @@ class RecommendationController(
     fun changeItemRecommendationCoefficient(
         @PathVariable itemId: UUID,
         @PathVariable ownerId: UUID,
-        @RequestBody coefficient_delta: Int
+        @RequestBody coefficientDelta: Int
     ) {
-        return;
+        return
     }
 
     @GetMapping("/trending/items")
     fun getTrendingItems() {
-        return;
+        return
     }
 
     @GetMapping("/trending/items/{itemId}")
     fun getRecommendationForItem(@PathVariable itemId: String) {
-        return;
+        return
     }
 }

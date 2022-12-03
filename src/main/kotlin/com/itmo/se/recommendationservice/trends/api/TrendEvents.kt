@@ -12,7 +12,7 @@ class TrendEvents {
     @DomainEvent(name = TREND_CREATED)
     data class TrendCreatedEvent(
         val trendId: UUID
-   ) : Event<TrendAggregate>(name = TREND_CREATED)
+    ) : Event<TrendAggregate>(name = TREND_CREATED)
 
     @DomainEvent(name = TRENDING_ITEM_CREATED)
     data class TrendingItemCreatedEvent(

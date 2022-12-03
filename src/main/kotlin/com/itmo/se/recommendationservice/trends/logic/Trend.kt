@@ -2,7 +2,8 @@ package com.itmo.se.recommendationservice.trends.logic
 
 import com.itmo.se.recommendationservice.orders.logic.Order
 import com.itmo.se.recommendationservice.trends.api.TrendAggregate
-import com.itmo.se.recommendationservice.trends.api.TrendEvents.*
+import com.itmo.se.recommendationservice.trends.api.TrendEvents.TrendCreatedEvent
+import com.itmo.se.recommendationservice.trends.api.TrendEvents.TrendingItemCreatedEvent
 import ru.quipy.core.annotations.StateTransitionFunc
 import ru.quipy.domain.AggregateState
 import java.util.*
@@ -31,12 +32,12 @@ class Trend : AggregateState<UUID, TrendAggregate> {
     }
 
     @StateTransitionFunc
-    fun createNewTrend(event: TrendCreatedEvent){
+    fun createNewTrend(event: TrendCreatedEvent) {
         this.trendId = event.trendId
     }
 
     @StateTransitionFunc
-    fun createNewTrendingItem(event: TrendingItemCreatedEvent){
+    fun createNewTrendingItem(event: TrendingItemCreatedEvent) {
         val trendingItem = TrendingItem(
             id = event.id,
             trendingItemId = event.trendingItemId,

@@ -5,7 +5,7 @@ import com.itmo.se.recommendationservice.recommendations.api.*
 import com.itmo.se.recommendationservice.trends.logic.Trend
 import ru.quipy.core.annotations.StateTransitionFunc
 import ru.quipy.domain.AggregateState
-import java.util.UUID
+import java.util.*
 
 class Recommendation : AggregateState<UUID, RecommendationAggregate> {
     private lateinit var recommendationId: UUID
@@ -20,42 +20,50 @@ class Recommendation : AggregateState<UUID, RecommendationAggregate> {
         return RecommendationCreatedEvent(recommendationId = id, userId = userId)
     }
 
-    fun createNewSeenItem(seenItemId: UUID = UUID.randomUUID(), owner_id: UUID, itemId: UUID):
+    fun createNewSeenItem(seenItemId: UUID = UUID.randomUUID(), ownerId: UUID, itemId: UUID):
             UserSeenItemCreatedEvent {
-        return UserSeenItemCreatedEvent(userId = owner_id, itemId = itemId, seenItemId = seenItemId)
+        return UserSeenItemCreatedEvent(userId = ownerId, itemId = itemId, seenItemId = seenItemId)
     }
 
-    private fun createNewSeenCategory(seenCategoryId: UUID = UUID.randomUUID(), owner_id: UUID, itemID: UUID):
+    private fun createNewSeenCategory(seenCategoryId: UUID = UUID.randomUUID(), ownerId: UUID, itemID: UUID):
             UserSeenCategoryCreatedEvent {
         val categoryId = Order().getCategoryIdByItemId(itemId = itemID)
-        return UserSeenCategoryCreatedEvent(userId = owner_id, seenCategoryId = seenCategoryId, categoryId = categoryId)
+        return UserSeenCategoryCreatedEvent(userId = ownerId, seenCategoryId = seenCategoryId, categoryId = categoryId)
     }
 
-    fun seenItemCoefficientIncreaseEvent(itemId: UUID, seenItemId: UUID, coefficient_delta: Int):
+    fun seenItemCoefficientIncreaseEvent(itemId: UUID, seenItemId: UUID, coefficientDelta: Int):
             UserSeenItemCoefficientIncreaseEvent {
         val seenItem = seenItems[seenItemId]
             ?: throw IllegalArgumentException("No such item to refer to: $seenItemId")
-        if (seenItem.recommendationCoefficient + coefficient_delta <= 100){
-            return UserSeenItemCoefficientIncreaseEvent(seenItemId = seenItemId,
-                coefficientDelta = coefficient_delta)
+        if (seenItem.recommendationCoefficient + coefficientDelta <= 100) {
+            return UserSeenItemCoefficientIncreaseEvent(
+                seenItemId = seenItemId,
+                coefficientDelta = coefficientDelta
+            )
         }
-        return UserSeenItemCoefficientIncreaseEvent(seenItemId = seenItemId,
-            coefficientDelta = 0)
+        return UserSeenItemCoefficientIncreaseEvent(
+            seenItemId = seenItemId,
+            coefficientDelta = 0
+        )
     }
 
-    fun seenItemCoefficientDecreaseEvent(itemId: UUID, seenItemId: UUID, coefficient_delta: Int):
+    fun seenItemCoefficientDecreaseEvent(itemId: UUID, seenItemId: UUID, coefficientDelta: Int):
             UserSeenItemCoefficientDecreaseEvent {
         val seenItem = seenItems[seenItemId]
             ?: throw IllegalArgumentException("No such item to refer to: $seenItemId")
-        if (seenItem.recommendationCoefficient - coefficient_delta >= 0){
-            return UserSeenItemCoefficientDecreaseEvent(seenItemId = seenItemId,
-                coefficientDelta = coefficient_delta)
+        if (seenItem.recommendationCoefficient - coefficientDelta >= 0) {
+            return UserSeenItemCoefficientDecreaseEvent(
+                seenItemId = seenItemId,
+                coefficientDelta = coefficientDelta
+            )
         }
-        return UserSeenItemCoefficientDecreaseEvent(seenItemId = seenItemId,
-            coefficientDelta = 0)
+        return UserSeenItemCoefficientDecreaseEvent(
+            seenItemId = seenItemId,
+            coefficientDelta = 0
+        )
     }
 
-    fun getTrendingItems(){
+    fun getTrendingItems() {
         return Trend().getAllTrendingItems()
     }
 
@@ -74,46 +82,50 @@ class Recommendation : AggregateState<UUID, RecommendationAggregate> {
     }
 
     @StateTransitionFunc
-    fun createNewSeenItem(event: UserSeenItemCreatedEvent){
+    fun createNewSeenItem(event: UserSeenItemCreatedEvent) {
         val seenItem = SeenItem(
             id = event.seenItemId,
             itemId = event.itemId,
             recommendationCoefficient = 50,
-            wasBought = false)
+            wasBought = false
+        )
         seenItems[event.seenItemId] = seenItem
-        createNewSeenCategory(owner_id = event.userId, itemID = event.itemId)
+        createNewSeenCategory(ownerId = event.userId, itemID = event.itemId)
     }
 
     @StateTransitionFunc
-    fun createNewSeenCategory(event: UserSeenCategoryCreatedEvent){
+    fun createNewSeenCategory(event: UserSeenCategoryCreatedEvent) {
         val seenCategory = SeenCategory(
             id = event.seenCategoryId,
             categoryId = event.categoryId,
-            recommendationCoefficient = 50)
+            recommendationCoefficient = 50
+        )
         seenCategories[event.seenCategoryId] = seenCategory
     }
 
     @StateTransitionFunc
-    fun UserSeenItemCoefficientIncreaseEvent(event: UserSeenItemCoefficientIncreaseEvent){
+    fun userSeenItemCoefficientIncreaseEvent(event: UserSeenItemCoefficientIncreaseEvent) {
         val item = seenItems[event.seenItemId]!!
-        item.increaseRecommendationCoefficient(coefficient_delta = event.coefficientDelta)
+        item.increaseRecommendationCoefficient(coefficientDelta = event.coefficientDelta)
         // a draft to show that changes in the coefficients of items also affect
         // the change in the coefficient of the category
         seenCategories[Order().getCategoryIdByItemId(
-            itemId = seenItems.values.filter { it.id == event.seenItemId }[0].itemId)]!!
-            .increaseRecommendationCoefficient(coefficient_delta = event.coefficientDelta/10)
+            itemId = seenItems.values.filter { it.id == event.seenItemId }[0].itemId
+        )]!!
+            .increaseRecommendationCoefficient(coefficientDelta = event.coefficientDelta / 10)
         seenItems[event.seenItemId] = item
     }
 
     @StateTransitionFunc
-    fun UserSeenItemCoefficientDecreaseEvent(event: UserSeenItemCoefficientDecreaseEvent){
+    fun userSeenItemCoefficientDecreaseEvent(event: UserSeenItemCoefficientDecreaseEvent) {
         val item = seenItems[event.seenItemId]!!
-        item.decreaseRecommendationCoefficient(coefficient_delta = event.coefficientDelta)
+        item.decreaseRecommendationCoefficient(coefficientDelta = event.coefficientDelta)
         // a draft to show that changes in the coefficients of items also affect
         // the change in the coefficient of the category
         seenCategories[Order().getCategoryIdByItemId(
-            itemId = seenItems.values.filter { it.id == event.seenItemId }[0].itemId)]!!
-            .decreaseRecommendationCoefficient(coefficient_delta = event.coefficientDelta/10)
+            itemId = seenItems.values.filter { it.id == event.seenItemId }[0].itemId
+        )]!!
+            .decreaseRecommendationCoefficient(coefficientDelta = event.coefficientDelta / 10)
         seenItems[event.seenItemId] = item
     }
 
@@ -126,12 +138,12 @@ data class SeenItem(
     internal var recommendationCoefficient: Int,
     internal var wasBought: Boolean,
 ) {
-    fun increaseRecommendationCoefficient(coefficient_delta: Int){
-        this.recommendationCoefficient += coefficient_delta
+    fun increaseRecommendationCoefficient(coefficientDelta: Int) {
+        this.recommendationCoefficient += coefficientDelta
     }
 
-    fun decreaseRecommendationCoefficient(coefficient_delta: Int){
-        this.recommendationCoefficient -= coefficient_delta
+    fun decreaseRecommendationCoefficient(coefficientDelta: Int) {
+        this.recommendationCoefficient -= coefficientDelta
     }
 }
 
@@ -141,11 +153,11 @@ data class SeenCategory(
     internal var recommendationCoefficient: Int,
 ) {
 
-    fun increaseRecommendationCoefficient(coefficient_delta: Int){
-        this.recommendationCoefficient += coefficient_delta
+    fun increaseRecommendationCoefficient(coefficientDelta: Int) {
+        this.recommendationCoefficient += coefficientDelta
     }
 
-    fun decreaseRecommendationCoefficient(coefficient_delta: Int){
-        this.recommendationCoefficient -= coefficient_delta
+    fun decreaseRecommendationCoefficient(coefficientDelta: Int) {
+        this.recommendationCoefficient -= coefficientDelta
     }
 }

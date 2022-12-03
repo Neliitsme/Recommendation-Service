@@ -1,6 +1,5 @@
 package com.itmo.se.recommendationservice.orders.logic
 
-import com.itmo.se.recommendationservice.recommendations.logic.SeenItem
 import java.util.*
 
 class Order {
@@ -11,7 +10,7 @@ class Order {
         return items
     }
 
-    fun getCategoryIdByItemId(itemId: UUID): UUID{
+    fun getCategoryIdByItemId(itemId: UUID): UUID {
         if (items.containsKey(itemId)) {
             return items[itemId]!!.categoryId
         } else {
