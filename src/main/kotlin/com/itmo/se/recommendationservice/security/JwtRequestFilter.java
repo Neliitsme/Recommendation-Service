@@ -1,6 +1,7 @@
 package com.itmo.se.recommendationservice.security;
 
 import com.itmo.se.recommendationservice.exception.ForbiddenException;
+import com.itmo.se.recommendationservice.user.AppUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +30,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             readTokenIfProvided(req);
         } catch (Exception e) {
             log.error("Cannot parse token", e);
-
         }
         chain.doFilter(req, res);
     }
@@ -41,11 +41,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String token = tokenString.substring("Bearer ".length());
         AuthToken authToken = jwtUtil.readToken(token);
 
-//        То есть он ищет юзера в базе по id, а у нас что
-
+//        То есть он ищет юзера в базе по id, а у нас что?
+//        Логика какая, если токен успешно прочитан, то пихаем в контекст
 //        Supplier<AppUser> userProvider = () -> userService.findUser(authToken.getId())
 //                .orElseThrow(() -> new ForbiddenException("User with username " + authToken.getUsername() + " not found"));
-//        SecurityContextHolder.getContext().setAuthentication(authToken.createAuthentication(userProvider));
-//        log.debug("User {} authorized", authToken.getUsername());
+
+        Supplier<AppUser> userProvider = () -> new AppUser(authToken.getId(), authToken.getRole());
+        SecurityContextHolder.getContext().setAuthentication(authToken.createAuthentication(userProvider));
+        log.debug("User {} authorized", authToken.getUserId());
     }
 }

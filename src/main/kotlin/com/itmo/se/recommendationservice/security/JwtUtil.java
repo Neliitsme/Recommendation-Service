@@ -23,9 +23,6 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
         long id = Long.parseLong(claims.getSubject());
-        String username = claims.get("username", String.class);
-        if (username == null)
-            throw new IllegalArgumentException("username is null");
         UserRole role = UserRole.valueOf(claims.get("role", String.class));
         return AuthToken.builder()
                 .userId(id)
