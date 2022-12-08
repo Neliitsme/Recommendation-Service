@@ -1,4 +1,4 @@
-package com.itmo.se.recommendationservice.security;
+package com.itmo.se.recommendationservice.recommendations.security;
 
 import com.itmo.se.recommendationservice.config.props.SecurityProperties;
 import com.itmo.se.recommendationservice.user.UserRole;

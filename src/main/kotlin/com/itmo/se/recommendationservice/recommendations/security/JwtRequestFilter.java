@@ -1,6 +1,5 @@
-package com.itmo.se.recommendationservice.security;
+package com.itmo.se.recommendationservice.recommendations.security;
 
-import com.itmo.se.recommendationservice.exception.ForbiddenException;
 import com.itmo.se.recommendationservice.user.AppUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

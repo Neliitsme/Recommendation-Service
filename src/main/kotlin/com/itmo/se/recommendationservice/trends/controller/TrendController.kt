@@ -3,6 +3,7 @@ package com.itmo.se.recommendationservice.trends.controller
 import com.itmo.se.recommendationservice.trends.api.TrendAggregate
 import com.itmo.se.recommendationservice.trends.api.TrendEvents.*
 import com.itmo.se.recommendationservice.trends.logic.Trend
+import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
 import ru.quipy.core.EventSourcingService
 import java.util.*
@@ -13,6 +14,7 @@ import java.util.*
 class TrendController(
     val trendEsService: EventSourcingService<UUID, TrendAggregate, Trend>
 ) {
+    @Secured("ROLE_ADMIN")
     @PostMapping("")
     fun createTrend(trendId: UUID = UUID.randomUUID()): TrendCreatedEvent {
         return trendEsService.create { it.createNewTrend(id = trendId) }
