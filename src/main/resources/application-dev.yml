@@ -3,3 +3,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: admin
     password: password
+
+security:
+  secret: mysuperstrongsecretwithlength32!
+  admin:
+    username: admin
+    password: password
