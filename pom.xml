@@ -98,15 +98,6 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
-        <!-- Uncomment this next dependency if you are using JDK 10 or earlier and you also want to use
-             RSASSA-PSS (PS256, PS384, PS512) algorithms.  JDK 11 or later does not require it for those algorithms:
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.70</version>
-            <scope>runtime</scope>
-        </dependency>
-        -->
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
