@@ -39,12 +39,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         String token = tokenString.substring("Bearer ".length());
         AuthToken authToken = jwtUtil.readToken(token);
-
-//        То есть он ищет юзера в базе по id, а у нас что?
-//        Логика какая, если токен успешно прочитан, то пихаем в контекст
-//        Supplier<AppUser> userProvider = () -> userService.findUser(authToken.getId())
-//                .orElseThrow(() -> new ForbiddenException("User with username " + authToken.getUsername() + " not found"));
-
         Supplier<AppUser> userProvider = () -> new AppUser(authToken.getId(), authToken.getRole());
         SecurityContextHolder.getContext().setAuthentication(authToken.createAuthentication(userProvider));
         log.debug("User {} authorized", authToken.getUserId());
