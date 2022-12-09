@@ -23,13 +23,13 @@ class TrendController(
         return trendEsService.create { it.createNewTrendingItem(trendingItemId = trendingItemId) }
     }
 
-    @GetMapping("/items")
-    fun getAllTrendingItems() {
-        return
-    }
-
-    @GetMapping("/items")
-    fun getTrendingItemsByCategory(categoryId: UUID) {
-        return
-    }
+//    @GetMapping("/items")
+//    fun getAllTrendingItems() {
+//        return
+//    }
+//
+//    @GetMapping("/items")
+//    fun getTrendingItemsByCategory(categoryId: UUID) {
+//        return
+//    }
 }
