@@ -1,5 +1,10 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: admin
-    password: password
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: recommendation-service
+      username: root
+      password: example
+  main:
+    allow-bean-definition-overriding: true

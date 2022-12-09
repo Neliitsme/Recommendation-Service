@@ -7,17 +7,16 @@ server:
 spring:
   application:
     name: recommendation-service
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-  jpa:
-    open-in-view: false
-    hibernate:
-      ddl-auto: create
+  data:
+    mongodb:
+      host: ${DB_HOST}
+      port: ${DB_PORT}
+      database: ${DB_NAME}
+      username: ${DB_USERNAME}
+      password: ${DB_PW}
 
 logging:
   level:
     root: info
-    sql: debug
+#    sql: debug
     com.itmo.se.recommendationservice: debug
