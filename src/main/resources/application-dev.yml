@@ -3,6 +3,4 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: admin
-      username: root
-      password: example
+      database: recommendation_service
