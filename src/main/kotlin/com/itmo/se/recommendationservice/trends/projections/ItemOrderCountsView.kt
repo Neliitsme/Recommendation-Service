@@ -27,7 +27,7 @@ class ItemOrderCountsView(
     fun init() {
         subscriptionsManager.createSubscriber(OrderAggregate::class, "item-order-counts-increase") {
             `when`(AddItemToOrderEvent::class) { event ->
-                val fromDb: Optional<ItemOrderCounts> = itemOrderCountsRepository.findByItemId(event.itemId)
+                val fromDb: Optional<ItemOrderCounts> = itemOrderCountsRepository.findById(event.id)
 
                 fromDb.ifPresentOrElse(
                     { entity ->
@@ -45,7 +45,7 @@ class ItemOrderCountsView(
 
         subscriptionsManager.createSubscriber(OrderAggregate::class, "item-order-counts-decrease") {
             `when`(RemoveItemFromOrderEvent::class) { event ->
-                val fromDb = itemOrderCountsRepository.findByItemId(event.itemId)
+                val fromDb = itemOrderCountsRepository.findById(event.id)
                 // Optional всегда isPresent, т.к. чтобы убрать товар(ы) из
                 // корзины нужно для начале его(их) туда добавить
                 // Думаю, что ситуаций, когда toSave.orderedTimes - event.countItem < 0
@@ -75,7 +75,7 @@ data class ItemOrderCounts(
 
 @Repository
 interface ItemOrderCountsRepository : JpaRepository<ItemOrderCounts, UUID> {
-    fun findByItemId(itemId: UUID): Optional<ItemOrderCounts>
+    fun findAllByItemId(itemId: UUID): Collection<ItemOrderCounts>
 }
 
 
