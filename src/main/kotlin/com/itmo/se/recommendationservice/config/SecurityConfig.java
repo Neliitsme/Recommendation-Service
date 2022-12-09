@@ -38,18 +38,4 @@ public class SecurityConfig {
                 .addFilterAfter(requestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-//     пока не знаю зачем это
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**")
-//                        .allowedOrigins("*")
-//                        .allowedMethods("*")
-//                        .allowedHeaders("*")
-//                        .maxAge(3600);
-//            }
-//        };
-//    }
 }
