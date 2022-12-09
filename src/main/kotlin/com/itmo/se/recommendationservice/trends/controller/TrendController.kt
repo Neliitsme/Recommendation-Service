@@ -25,11 +25,11 @@ class TrendController(
 
     @GetMapping("/items")
     fun getAllTrendingItems() {
-        return
+//        trendEsService.getState()
     }
 
     @GetMapping("/items")
-    fun getTrendingItemsByCategory(categoryId: UUID) {
-        return
+    fun getTrendingItemsByCategory(categoryId: UUID): Trend? {
+        return trendEsService.getState(categoryId)
     }
 }

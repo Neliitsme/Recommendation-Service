@@ -2,6 +2,7 @@ package com.itmo.se.recommendationservice.recommendations.controller
 
 import com.itmo.se.recommendationservice.recommendations.api.RecommendationAggregate
 import com.itmo.se.recommendationservice.recommendations.api.RecommendationCreatedEvent
+import com.itmo.se.recommendationservice.recommendations.api.UserSeenItemCoefficientIncreaseEvent
 import com.itmo.se.recommendationservice.recommendations.api.UserSeenItemCreatedEvent
 import com.itmo.se.recommendationservice.recommendations.logic.Recommendation
 import org.springframework.web.bind.annotation.*
@@ -35,8 +36,14 @@ class RecommendationController(
         @PathVariable itemId: UUID,
         @PathVariable ownerId: UUID,
         @RequestBody coefficientDelta: Int
-    ) {
-        return
+    ): UserSeenItemCoefficientIncreaseEvent {
+        return recommendationEsService.update(itemId,{
+            it.seenItemCoefficientIncreaseEvent(
+                itemId = itemId,
+                seenItemId = ownerId,
+                coefficientDelta = coefficientDelta
+            )
+        })
     }
 
     @GetMapping("/trending/items")
@@ -45,7 +52,7 @@ class RecommendationController(
     }
 
     @GetMapping("/trending/items/{itemId}")
-    fun getRecommendationForItem(@PathVariable itemId: String) {
-        return
+    fun getRecommendationForItem(@PathVariable itemId: UUID): Recommendation? {
+        return recommendationEsService.getState(itemId)
     }
 }
