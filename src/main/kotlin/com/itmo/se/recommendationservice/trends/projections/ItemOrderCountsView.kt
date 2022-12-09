@@ -3,7 +3,9 @@ package com.itmo.se.recommendationservice.trends.projections
 import com.itmo.se.recommendationservice.orders.api.OrderAggregate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 import ru.quipy.core.annotations.DomainEvent
@@ -11,7 +13,6 @@ import ru.quipy.domain.Event
 import ru.quipy.streams.AggregateSubscriptionsManager
 import java.util.*
 import javax.annotation.PostConstruct
-import javax.persistence.*
 
 const val ADD_ITEM_TO_ORDER_EVENT = "ADD_ITEM_TO_ORDER"
 const val REMOVE_ITEM_FROM_ORDER_EVENT = "REMOVE_ITEM_FROM_ORDER"
@@ -60,21 +61,18 @@ class ItemOrderCountsView(
     }
 }
 
-@Table
+@Document
 data class ItemOrderCounts(
     @Id
-    @GeneratedValue
     var id: UUID? = null,
 
-    @Column(unique = true)
     var itemId: UUID? = null,
 
-    @Column
     var orderedTimes: Long = 0
 )
 
 @Repository
-interface ItemOrderCountsRepository : JpaRepository<ItemOrderCounts, UUID> {
+interface ItemOrderCountsRepository : MongoRepository<ItemOrderCounts, UUID> {
     fun findByItemId(itemId: UUID): Optional<ItemOrderCounts>
 }
 

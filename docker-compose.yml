@@ -1,17 +1,15 @@
 version: '3.9'
 
 services:
-  postgres:
-    image: postgres:14
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5432:5432"
-    volumes:
-      - db-data:/var/lib/postgresql/data
+  mongo:
+    image: mongo:latest
     restart: always
-
-volumes:
-  db-data:
+    ports:
+      - "27017:27017"
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/
