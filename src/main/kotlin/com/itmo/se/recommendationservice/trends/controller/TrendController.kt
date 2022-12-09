@@ -28,8 +28,8 @@ class TrendController(
     }
 
     @GetMapping("/items")
-    fun getAllTrendingItems() {
-//        trendEsService.getState()
+    fun getAllTrendingItems(): Collection<ItemOrderCounts> {
+        return trendService.getAllTrendingItems()
     }
 
     @GetMapping("/items/{itemId}")

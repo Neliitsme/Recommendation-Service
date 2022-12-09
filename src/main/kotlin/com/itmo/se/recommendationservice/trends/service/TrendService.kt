@@ -12,4 +12,8 @@ class TrendService(
     fun getTrendingItemsByItemId(itemId: UUID): Collection<ItemOrderCounts> {
         return itemOrderCountsRepository.findAllByItemId(itemId)
     }
+
+    fun getAllTrendingItems(): Collection<ItemOrderCounts> {
+        return itemOrderCountsRepository.findAll()
+    }
 }
