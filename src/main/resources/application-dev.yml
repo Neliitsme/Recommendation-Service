@@ -1,8 +1,9 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: admin
-    password: password
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: recommendation_service
 
 security:
   secret: mysuperstrongsecretwithlength32!
