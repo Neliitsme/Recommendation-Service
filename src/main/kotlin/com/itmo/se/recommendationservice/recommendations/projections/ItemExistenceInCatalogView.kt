@@ -71,6 +71,9 @@ data class ItemsInCatalog(
 @Repository
 interface ItemsInCatalogRepository : MongoRepository<ItemsInCatalog, UUID> {
     fun findItemById(itemId: UUID): Optional<ItemsInCatalog>
+
+    // TODO: method realization
+    fun getCategoryByItemId(itemId: UUID): UUID
 }
 
 

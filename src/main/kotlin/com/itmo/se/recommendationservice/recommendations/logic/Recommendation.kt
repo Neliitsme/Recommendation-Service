@@ -1,7 +1,7 @@
 package com.itmo.se.recommendationservice.recommendations.logic
 
-import com.itmo.se.recommendationservice.orders.logic.Order
 import com.itmo.se.recommendationservice.recommendations.api.*
+import com.itmo.se.recommendationservice.recommendations.projections.ItemsInCatalogRepository
 import com.itmo.se.recommendationservice.trends.logic.Trend
 import ru.quipy.core.annotations.StateTransitionFunc
 import ru.quipy.domain.AggregateState
@@ -10,6 +10,7 @@ import java.util.*
 class Recommendation : AggregateState<UUID, RecommendationAggregate> {
     private lateinit var recommendationId: UUID
     private lateinit var userId: UUID
+    private lateinit var itemsInCatalogRepository: ItemsInCatalogRepository
 
     var seenItems: MutableMap<UUID, SeenItem> = mutableMapOf()
     var seenCategories: MutableMap<UUID, SeenCategory> = mutableMapOf()
@@ -27,7 +28,7 @@ class Recommendation : AggregateState<UUID, RecommendationAggregate> {
 
     private fun createNewSeenCategory(seenCategoryId: UUID = UUID.randomUUID(), ownerId: UUID, itemID: UUID):
             UserSeenCategoryCreatedEvent {
-        val categoryId = Order().getCategoryIdByItemId(itemId = itemID)
+        val categoryId = itemsInCatalogRepository.getCategoryByItemId(itemId = itemID)
         return UserSeenCategoryCreatedEvent(userId = ownerId, seenCategoryId = seenCategoryId, categoryId = categoryId)
     }
 
@@ -72,9 +73,8 @@ class Recommendation : AggregateState<UUID, RecommendationAggregate> {
     }
 
     fun getRecommendationForItem(itemId: UUID): List<SeenItem> {
-        val order = Order()
-        val categoryId = order.getCategoryIdByItemId(itemId)
-        return seenItems.filter { order.getCategoryIdByItemId(it.value.itemId) == categoryId }
+        val categoryId = itemsInCatalogRepository.getCategoryByItemId(itemId = itemId)
+        return seenItems.filter { itemsInCatalogRepository.getCategoryByItemId(it.value.itemId) == categoryId }
             .values
             .sortedByDescending { it.recommendationCoefficient }
     }
@@ -113,7 +113,7 @@ class Recommendation : AggregateState<UUID, RecommendationAggregate> {
         item.increaseRecommendationCoefficient(coefficientDelta = event.coefficientDelta)
         // a draft to show that changes in the coefficients of items also affect
         // the change in the coefficient of the category
-        seenCategories[Order().getCategoryIdByItemId(
+        seenCategories[itemsInCatalogRepository.getCategoryByItemId(
             itemId = seenItems.values.filter { it.id == event.seenItemId }[0].itemId
         )]!!
             .increaseRecommendationCoefficient(coefficientDelta = event.coefficientDelta / 10)
@@ -126,7 +126,7 @@ class Recommendation : AggregateState<UUID, RecommendationAggregate> {
         item.decreaseRecommendationCoefficient(coefficientDelta = event.coefficientDelta)
         // a draft to show that changes in the coefficients of items also affect
         // the change in the coefficient of the category
-        seenCategories[Order().getCategoryIdByItemId(
+        seenCategories[itemsInCatalogRepository.getCategoryByItemId(
             itemId = seenItems.values.filter { it.id == event.seenItemId }[0].itemId
         )]!!
             .decreaseRecommendationCoefficient(coefficientDelta = event.coefficientDelta / 10)
