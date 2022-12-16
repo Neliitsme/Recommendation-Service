@@ -26,9 +26,9 @@ class Recommendation : AggregateState<UUID, RecommendationAggregate> {
         return UserSeenItemCreatedEvent(userId = ownerId, itemId = itemId, seenItemId = seenItemId)
     }
 
-    private fun createNewSeenCategory(seenCategoryId: UUID = UUID.randomUUID(), ownerId: UUID, itemID: UUID):
+    private fun createNewSeenCategory(seenCategoryId: UUID = UUID.randomUUID(), ownerId: UUID, itemId: UUID):
             UserSeenCategoryCreatedEvent {
-        val categoryId = itemsInCatalogRepository.getCategoryByItemId(itemId = itemID)
+        val categoryId = itemsInCatalogRepository.getCategoryByItemId(itemId = itemId)
         return UserSeenCategoryCreatedEvent(userId = ownerId, seenCategoryId = seenCategoryId, categoryId = categoryId)
     }
 
@@ -94,7 +94,7 @@ class Recommendation : AggregateState<UUID, RecommendationAggregate> {
             wasBought = false
         )
         seenItems[event.seenItemId] = seenItem
-        createNewSeenCategory(ownerId = event.userId, itemID = event.itemId)
+        createNewSeenCategory(ownerId = event.userId, itemId = event.itemId)
     }
 
     @StateTransitionFunc
