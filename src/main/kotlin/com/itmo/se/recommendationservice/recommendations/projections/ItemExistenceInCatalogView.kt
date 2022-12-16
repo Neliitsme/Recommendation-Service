@@ -20,7 +20,7 @@ const val REMOVE_ITEM_FROM_CATALOG_EVENT = "REMOVE_ITEM_FROM_CATALOG_EVENT"
 @Component
 class ItemExistenceInCatalogView(
     private val itemsInCatalogRepository: ItemsInCatalogRepository,
-    private val subscriptionsManager: AggregateSubscriptionsManager
+    private val subscriptionsManager: AggregateSubscriptionsManager,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(ItemExistenceInCatalogView::class.java)
 
@@ -28,15 +28,12 @@ class ItemExistenceInCatalogView(
     fun init() {
         subscriptionsManager.createSubscriber(CatalogAggregate::class, "item-added-to-calalog") {
             `when`(AddItemToCatalogEvent::class) { event ->
-                val fromDb: Optional<ItemsInCatalog> = itemsInCatalogRepository.findItemById(event.itemId)
+                val foundItem: ItemsInCatalog? = itemsInCatalogRepository.findItemById(event.itemId)
+                if (foundItem != null) {
+                    val toSave = ItemsInCatalog(itemId = event.itemId, categoryId = event.categoryID)
+                    itemsInCatalogRepository.save(toSave)
+                }
 
-                fromDb.ifPresentOrElse(
-                    {},
-                    {
-                        val toSave = ItemsInCatalog(itemId = event.itemId, categoryId = event.categoryID)
-                        itemsInCatalogRepository.save(toSave)
-                    }
-                )
                 logger.info(
                     "The item with id=${event.itemId} and category_id=${event.categoryID} " +
                             "was added to catalog"
@@ -46,9 +43,11 @@ class ItemExistenceInCatalogView(
 
         subscriptionsManager.createSubscriber(CatalogAggregate::class, "item-removed-from-catalog") {
             `when`(RemoveItemFromCatalogEvent::class) { event ->
-                val fromDb = itemsInCatalogRepository.findItemById(event.itemId)
-                val toDelete = fromDb.get()
-                itemsInCatalogRepository.delete(toDelete)
+                val foundItem = itemsInCatalogRepository.findItemById(event.itemId)
+                if (foundItem != null) {
+                    itemsInCatalogRepository.delete(foundItem)
+                }
+                
                 logger.info(
                     "The item with id=${event.itemId} was removed to catalog"
                 )
@@ -65,12 +64,12 @@ data class ItemsInCatalog(
 
     val itemId: UUID? = null,
 
-    val categoryId: UUID? = null
+    val categoryId: UUID? = null,
 )
 
 @Repository
 interface ItemsInCatalogRepository : MongoRepository<ItemsInCatalog, UUID> {
-    fun findItemById(itemId: UUID): Optional<ItemsInCatalog>
+    fun findItemById(itemId: UUID): ItemsInCatalog?
 
     // TODO: method realization
     fun getCategoryByItemId(itemId: UUID): UUID
@@ -80,10 +79,10 @@ interface ItemsInCatalogRepository : MongoRepository<ItemsInCatalog, UUID> {
 @DomainEvent(name = ADD_ITEM_TO_CATALOG_EVENT)
 data class AddItemToCatalogEvent(
     val itemId: UUID,
-    val categoryID: UUID
+    val categoryID: UUID,
 ) : Event<CatalogAggregate>(name = ADD_ITEM_TO_CATALOG_EVENT)
 
 @DomainEvent(name = REMOVE_ITEM_FROM_CATALOG_EVENT)
 data class RemoveItemFromCatalogEvent(
-    val itemId: UUID
+    val itemId: UUID,
 ) : Event<CatalogAggregate>(name = REMOVE_ITEM_FROM_CATALOG_EVENT)
