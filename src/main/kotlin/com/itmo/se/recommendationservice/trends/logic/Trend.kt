@@ -1,6 +1,6 @@
 package com.itmo.se.recommendationservice.trends.logic
 
-import com.itmo.se.recommendationservice.orders.logic.Order
+import com.itmo.se.recommendationservice.recommendations.projections.ItemsInCatalogRepository
 import com.itmo.se.recommendationservice.trends.api.TrendAggregate
 import com.itmo.se.recommendationservice.trends.api.TrendEvents.TrendCreatedEvent
 import com.itmo.se.recommendationservice.trends.api.TrendEvents.TrendingItemCreatedEvent
@@ -10,6 +10,7 @@ import java.util.*
 
 class Trend : AggregateState<UUID, TrendAggregate> {
     private lateinit var trendId: UUID
+    private lateinit var itemsInCatalogRepository: ItemsInCatalogRepository
 
     var trendingItems: MutableList<TrendingItem> = mutableListOf()
 
@@ -28,7 +29,9 @@ class Trend : AggregateState<UUID, TrendAggregate> {
     }
 
     fun getTrendingItemsByCategory(categoryId: UUID): List<TrendingItem> {
-        return trendingItems.filter { Order().getCategoryIdByItemId(it.trendingItemId) == categoryId }
+        return trendingItems.filter {
+            itemsInCatalogRepository.getCategoryByItemId(it.trendingItemId) == categoryId
+        }
     }
 
     @StateTransitionFunc
