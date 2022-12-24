@@ -11,8 +11,10 @@ import java.util.*
 @RestController
 @RequestMapping("/recommendations")
 class RecommendationController(
-    val recommendationEsService: EventSourcingService<UUID, RecommendationAggregate, Recommendation>
+    val recommendationEsService: EventSourcingService<UUID, RecommendationAggregate, Recommendation>,
 ) {
+    // TODO: Probably remove later, due to existence of `UsersSubscriber`
+    // It's fine to have it for now for testing
     @PostMapping("/personal/{ownerId}")
     fun createPersonalRecommendation(@PathVariable ownerId: UUID): RecommendationCreatedEvent {
         return recommendationEsService.create { it.createNewRecommendation(userId = ownerId) }
@@ -34,16 +36,18 @@ class RecommendationController(
     fun changeItemRecommendationCoefficient(
         @PathVariable itemId: UUID,
         @PathVariable ownerId: UUID,
-        @RequestBody coefficientDelta: Int
+        @RequestBody coefficientDelta: Int,
     ) {
         return
     }
 
+    // TODO: Get from the view
     @GetMapping("/trending/items")
     fun getTrendingItems() {
         return
     }
 
+    // TODO: Get from the view
     @GetMapping("/trending/items/{itemId}")
     fun getRecommendationForItem(@PathVariable itemId: String) {
         return
