@@ -4,3 +4,9 @@ spring:
       host: localhost
       port: 27017
       database: recommendation_service
+
+security:
+  secret: mysuperstrongsecretwithlength32!
+  admin:
+    username: admin
+    password: password
